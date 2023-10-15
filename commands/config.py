@@ -45,7 +45,7 @@ class Config(commands.Cog):
     @config.command()
     async def set_mod_role(self,
         ctx: ApplicationContext,
-        id: Option(int, 'role id for the games moderators')
+        id: Option(int, 'role id for the events moderators')
     ):
         """
         Set the mod_role_id for this guild.

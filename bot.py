@@ -7,7 +7,7 @@ from handlers import *
 from discord.ext import commands
 
 logging.basicConfig(format="%(asctime)s %(name)s:%(levelname)-8s %(message)s",
-                    filename="/var/log/osrs_games.log", level=logging.INFO)
+                    filename="/var/log/osrs_events.log", level=logging.INFO)
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 discord_log = logging.getLogger('discord')
