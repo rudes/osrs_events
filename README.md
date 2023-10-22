@@ -1,4 +1,4 @@
-# OSRS Games
+# OSRS Events
 
 discord bot for managing osrs events
 
@@ -15,7 +15,7 @@ make clean
 - global mod commands
     - admin
         - control settings
-        - setup roles and enable/disable games
+        - setup roles and enable/disable events
 	- teams
 		- gen team from WOM api
 		- add member to team
