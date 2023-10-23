@@ -10,8 +10,6 @@ from discord import SlashCommandGroup, ApplicationContext
 from discord.ext import commands
 from discord.commands import Option
 
-from .checks import is_mod
-
 log = logging.getLogger(__name__)
 
 """
@@ -34,7 +32,7 @@ class Config(commands.Cog):
     config = SlashCommandGroup(
         "config",
         "Change the settings for the entire server. CAREFUL.",
-        checks=[is_mod()],
+        checks=[commands.has_permissions(administrator=True).predicate],
     )
 
     def save_config(self, guild_id, guild_config):
@@ -63,10 +61,10 @@ class Config(commands.Cog):
     mod_role = config.create_subgroup(
         "mod_role",
         "View/Change the Moderator Role for this Discord",
-        checks=[is_mod()],
+        checks=[commands.has_permissions(administrator=True).predicate],
     )
 
-    @mod_role.command(name='set')
+    @mod_role.command(name="set")
     async def set_mod_role(
         self,
         ctx: ApplicationContext,
@@ -85,7 +83,7 @@ class Config(commands.Cog):
         except Exception as e:
             log.exception(f"set_mod_role,{type(e)} error occured,{e}")
 
-    @mod_role.command(name='view')
+    @mod_role.command(name="view")
     async def view_mod_role(self, ctx: ApplicationContext):
         """Get the Moderator Role for this Discord"""
         try:
@@ -101,10 +99,10 @@ class Config(commands.Cog):
     event_channel = config.create_subgroup(
         "event_channel",
         "View/Change the Event Forum Channel for this Discord",
-        checks=[is_mod()],
+        checks=[commands.has_permissions(administrator=True).predicate],
     )
 
-    @event_channel.command(name='set')
+    @event_channel.command(name="set")
     async def set_event_channel(
         self,
         ctx: ApplicationContext,
@@ -123,7 +121,7 @@ class Config(commands.Cog):
         except Exception as e:
             log.exception(f"set_event_channel,{type(e)} error occured,{e}")
 
-    @event_channel.command(name='view')
+    @event_channel.command(name="view")
     async def view_event_channel(self, ctx: ApplicationContext):
         """Get the Moderator Role for this Discord"""
         try:
@@ -135,3 +133,8 @@ class Config(commands.Cog):
             await ctx.respond(f"Event Forum Channel is {chan.mention}.")
         except Exception as e:
             log.exception(f"view_event_channel,{type(e)} error occured,{e}")
+
+
+def setup(bot):
+    """pycord setup function"""
+    bot.add_cog(Config(bot))

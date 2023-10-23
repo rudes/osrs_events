@@ -21,3 +21,7 @@ class Ready(commands.Cog):
             log.info("on_ready,presence state set")
         except Exception as e:
             log.exception(f"on_ready,{type(e)} error occured,{e}")
+
+
+def setup(bot):
+    bot.add_cog(Ready(bot))

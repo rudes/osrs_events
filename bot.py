@@ -6,8 +6,6 @@ import logging
 import discord
 
 from discord.ext import commands
-from commands import config
-from handlers import ready
 
 logging.basicConfig(
     format="%(asctime)s %(name)s:%(levelname)-8s %(message)s",
@@ -19,23 +17,11 @@ log.setLevel(logging.INFO)
 discord_log = logging.getLogger("discord")
 discord_log.setLevel(logging.ERROR)
 
-
-def main():
-    """main entrypoint"""
+if __name__ == "__main__":
     bot = commands.Bot(
-        command_prefix="!",
         debug_guilds=[1159942455752409118],
         intents=discord.Intents.all(),
     )
 
-    # commands
-    bot.add_cog(config.Config(bot))
-
-    # handlers
-    bot.add_cog(ready.Ready(bot))
-
+    bot.load_extensions("commands", "handlers")
     bot.run(str(os.environ["DISCORD_BOTKEY"]))
-
-
-if __name__ == "__main__":
-    main()

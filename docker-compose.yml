@@ -11,4 +11,4 @@ services:
   image: redis:7.2.1-alpine
   restart: always
   volumes:
-   - '/var/opt/osrs_games_db:/data'
+   - '/var/opt/osrs_events_db:/data'
