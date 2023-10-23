@@ -2,13 +2,12 @@
 Commands for managing the guild level config for osrs events
 """
 import logging
-import json
 import discord
-import redis
 
 from discord import SlashCommandGroup, ApplicationContext
 from discord.ext import commands
 from discord.commands import Option
+from .util.config import Config
 
 log = logging.getLogger(__name__)
 
@@ -20,43 +19,20 @@ log = logging.getLogger(__name__)
 """
 
 
-class Config(commands.Cog):
+class Settings(commands.Cog):
     """
     Config class housing commands for guild level config
     """
 
     def __init__(self, bot):
         self.bot = bot
-        self.db = redis.StrictRedis(host="db")
+        self.config = Config()
 
     config = SlashCommandGroup(
         "config",
         "Change the settings for the entire server. CAREFUL.",
         checks=[commands.has_permissions(administrator=True).predicate],
     )
-
-    def save_config(self, guild_id, guild_config):
-        """save the config to the db"""
-        config_json = json.dumps(guild_config)
-        self.db.set(str(guild_id), config_json)
-
-    async def setup_server(self, ctx: ApplicationContext):
-        """prepare the discord for events"""
-        # ask for approval
-        # create mod role
-        # create event category and event channels
-        guild_config = {
-            "mod_role_id": 1159942632605237298,
-            "event_channel_id": 1159949415335854160,
-        }
-        self.save_config(str(ctx.guild.id), guild_config)
-
-    async def get_config(self, ctx: ApplicationContext):
-        """get the config from the db"""
-        raw = self.db.get(str(ctx.guild.id))
-        if not raw:
-            return await self.setup_server(ctx)
-        return json.loads(raw.decode("utf-8"))
 
     mod_role = config.create_subgroup(
         "mod_role",
@@ -74,11 +50,11 @@ class Config(commands.Cog):
         Set the Moderator Role for this Discord. People with this role will have control of events.
         """
         try:
-            guild_config = await self.get_config(ctx)
+            guild_config = await self.config.get_config(ctx)
             if not guild_config:
                 return
             guild_config["mod_role_id"] = role.id
-            self.save_config(ctx.guild.id, guild_config)
+            self.config.save_config(ctx.guild.id, guild_config)
             await ctx.respond(f"Moderator Role updated to @**{role.name}**.")
         except Exception as e:
             log.exception(f"set_mod_role,{type(e)} error occured,{e}")
@@ -87,7 +63,7 @@ class Config(commands.Cog):
     async def view_mod_role(self, ctx: ApplicationContext):
         """Get the Moderator Role for this Discord"""
         try:
-            guild_config = await self.get_config(ctx)
+            guild_config = await self.config.get_config(ctx)
             if not guild_config:
                 return
             mod_role_id = guild_config["mod_role_id"]
@@ -112,11 +88,11 @@ class Config(commands.Cog):
         Set the Event Forum Channel for this Discord.
         """
         try:
-            guild_config = await self.get_config(ctx)
+            guild_config = await self.config.get_config(ctx)
             if not guild_config:
                 return
             guild_config["event_channel_id"] = chan.id
-            self.save_config(ctx.guild.id, guild_config)
+            self.config.save_config(ctx.guild.id, guild_config)
             await ctx.respond(f"Event Forum Channel updated to {chan.mention}.")
         except Exception as e:
             log.exception(f"set_event_channel,{type(e)} error occured,{e}")
@@ -125,7 +101,7 @@ class Config(commands.Cog):
     async def view_event_channel(self, ctx: ApplicationContext):
         """Get the Moderator Role for this Discord"""
         try:
-            guild_config = await self.get_config(ctx)
+            guild_config = await self.config.get_config(ctx)
             if not guild_config:
                 return
             event_chan_id = guild_config["event_channel_id"]
@@ -137,4 +113,4 @@ class Config(commands.Cog):
 
 def setup(bot):
     """pycord setup function"""
-    bot.add_cog(Config(bot))
+    bot.add_cog(Settings(bot))
