@@ -1,10 +1,8 @@
 """
 helper functions for checking the user of the command can execute it
 """
-import json
-
 from discord.ext import commands
-from redis import StrictRedis
+from config import Config
 
 
 def is_mod():
@@ -14,9 +12,8 @@ def is_mod():
     """
 
     async def predicate(ctx):
-        db = StrictRedis(host="db")
-        guild_config = db.get(str(ctx.guild.id)).decode("utf-8")
-        mod_role_id = json.loads(guild_config)["mod_role_id"]
+        config = Config()
+        mod_role_id = config.get(ctx.guild.id, "mod_role_id")
         mod_role = ctx.guild.get_role(mod_role_id)
         return mod_role in ctx.author.roles
 
