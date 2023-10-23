@@ -3,6 +3,9 @@ import logging
 import json
 import redis
 
+from discord import PermissionOverwrite
+from discord.channel import ForumTag
+
 log = logging.getLogger(__name__)
 
 
@@ -28,13 +31,46 @@ class Config:
 
     async def setup_config(self, ctx):
         """prepare the discord for events"""
-        # if "COMMUNITY" in ctx.guild.features:
         # ask for approval
-        # create mod role
-        # create event category and event channels
+        if "COMMUNITY" not in ctx.guild.features:
+            await ctx.respond("Convert your discord to a Community")
+            return
+
+        event_cat = await ctx.guild.create_category("EVENTS")
+
+        mod_role = None
+        for role in await ctx.guild.fetch_roles():
+            if role.name == "Event Moderator":
+                mod_role = role
+        if not mod_role:
+            mod_role = await ctx.guild.create_role("Event Moderator", mentionable=True)
+
+        mod_overwrites = {
+            ctx.guild.default_role: PermissionOverwrite(read_messages=False),
+            mod_role: PermissionOverwrite(read_messages=True),
+        }
+        mod_channel = await event_cat.create_text_channel(
+            "mods", overwrites=mod_overwrites
+        )
+
+        forum_overwrites = {
+            ctx.guild.default_role: PermissionOverwrite(send_messages=False),
+        }
+        event_channel = await event_cat.create_forum_channel(
+            "events", overwrites=forum_overwrites
+        )
+        tags = [
+            ForumTag(name="Event", emoji="🎟️"),
+            ForumTag(name="Bingo", emoji="🎯"),
+            ForumTag(name="TileRace", emoji="🎲"),
+        ]
+        await event_channel.edit(available_tags=tags)
+        await mod_channel.edit(position=0)
+
         guild_config = {
-            "mod_role_id": 1159942632605237298,
-            "event_channel_id": 1159949415335854160,
+            "mod_role_id": mod_role.id,
+            "mod_channel_id": mod_channel.id,
+            "event_channel_id": event_channel.id,
         }
         self.db.set(str(ctx.guild.id), json.dumps(guild_config))
         await ctx.respond("Config created.")
