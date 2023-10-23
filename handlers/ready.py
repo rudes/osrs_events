@@ -24,4 +24,5 @@ class Ready(commands.Cog):
 
 
 def setup(bot):
+    """pycord entrypoint"""
     bot.add_cog(Ready(bot))
