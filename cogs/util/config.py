@@ -9,8 +9,10 @@ from discord.channel import ForumTag
 
 log = logging.getLogger(__name__)
 
+
 class SetupApproval(discord.ui.Modal):
-    """ Popup modal asking for approval """
+    """Popup modal asking for approval"""
+
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(
             discord.ui.InputText(
@@ -22,10 +24,10 @@ class SetupApproval(discord.ui.Modal):
         )
 
     async def callback(self, ctx: discord.Interaction):
-        """ Popup modal asking for approval """
+        """Popup modal asking for approval"""
 
         response = self.children[0].value.lower()
-        if not response.startswith('y'):
+        if not response.startswith("y"):
             await ctx.response.send_message("Config not created.")
             return
 

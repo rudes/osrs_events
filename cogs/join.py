@@ -6,8 +6,10 @@ from .util.config import Config
 
 log = logging.getLogger(__name__)
 
+
 class JoinGuild(commands.Cog):
     """Handle joining a new guild or thread"""
+
     def __init__(self, bot):
         self.bot = bot
         self.config = Config()
@@ -30,5 +32,5 @@ class JoinGuild(commands.Cog):
 
 
 def setup(bot):
-    """ load extension """
+    """load extension"""
     bot.add_cog(JoinGuild(bot))
