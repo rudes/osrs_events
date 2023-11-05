@@ -1,0 +1,48 @@
+"[guild id ##]": {
+    "tileraces": [
+        {
+            "map": {
+                "start": [1,2,3,4,5],
+                "easy": [1,2,3,4,5],
+                "hard": [1,2,3,4,5],
+                "end": [1,2,3,4,5]
+            },
+            "epoch_start": 1696194000,
+            "last_reminder": 1699147213,
+            "title": "Tile Race Oct 2023",
+            "creator": "kylestanley",
+            "signups": ["kylestanley"],
+            "teams": {
+                "Team 1": {
+                    "has_roll": true,
+                    "at_fork": false,
+                    "current_pos": 0,
+                    "current_path": "start",
+                    "current_tier": "Skilling",
+                    "captain": "kylestanley",
+                    "members": ["kylestanley"],
+                    "current_challenges": [1699147000],
+                    "completed_challenges": [
+                        {
+                            "id": 1699147000,
+                            "date_completed": 1699147078,
+                            "message": "https://discord.com/channels/####/####/####"
+                        }
+                    ]
+                }
+            },
+            "challenges": [
+                {
+                    "id": 1699147000,
+                    "type": "Skilling",
+                    "group_size": 1,
+                    "description": "Get a [Tome of Fire](https://oldschool.runescape.wiki/w/Tome_of_fire>).",
+                    "details": [
+                        "1. Must collect the crates after receiving the challenge.",
+                        "2. Must be done either alone or in a group with mostly your team."
+                    ]
+                }
+            ]
+        }
+    ]
+}
