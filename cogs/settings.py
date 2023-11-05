@@ -39,7 +39,7 @@ class Settings(commands.Cog):
         self,
         ctx: ApplicationContext,
     ):
-        """trigger server setup"""
+        """Creates a Category, Role, and Forum Channel to setup Events"""
         try:
             await self.config.setup_config(ctx)
         except Exception as e:

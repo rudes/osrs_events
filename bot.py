@@ -24,5 +24,5 @@ bot = commands.Bot(
     intents=discord.Intents.all(),
 )
 
-bot.load_extensions("commands", "handlers")
+bot.load_extensions("cogs")
 bot.run(str(os.environ["DISCORD_BOTKEY"]))
