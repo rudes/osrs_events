@@ -9,7 +9,7 @@ from discord.ext import commands
 
 logging.basicConfig(
     format="%(asctime)s %(name)s:%(levelname)-8s %(message)s",
-    filename="/var/log/osrs_events.log",
+    filename="/var/log/discord/osrs_events.log",
     level=logging.INFO,
 )
 
